@@ -3,421 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متحف لولو - عيد ميلاد سعيد 💖</title>
+    <title>الشيخ علي - الموقع الرسمي</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* إعدادات الألوان الأساسية المتناسقة مع الفخامة */
         :root {
-            --bg-color: #0f0c29;
-            --rose: #e94057;
-            --gold: #f27121;
-            --soft-white: #f8f9fa;
+            --primary-gold: #D4AF37;
+            --dark-bg: #0d0d0d;
+            --sec-bg: #1a1a1a;
+            --text-light: #f4f4f4;
+            --text-muted: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-            color: var(--soft-white);
-            margin: 0;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
         }
 
-        section {
-            min-height: 100vh;
-            padding: 60px 20px;
+        /* تنسيق الهيدر (الشريط العلوي) */
+        header {
+            background-color: var(--sec-bg);
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .logo {
+            font-family: 'Amiri', serif;
+            font-size: 2.2rem;
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary-gold);
+        }
+
+        /* تنسيق القسم الرئيسي (Hero Section) */
+        .hero {
+            height: calc(100vh - 80px);
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: center;
             text-align: center;
-            position: relative;
+            padding: 0 20px;
+            /* يمكنك استبدال الرابط أدناه بصورة خلفية إسلامية أو زخرفة تناسب المحتوى */
+            background: linear-gradient(rgba(13, 13, 13, 0.85), rgba(13, 13, 13, 0.95)), url('https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
         }
 
-        #stars-canvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
+        .hero h1 {
+            font-family: 'Amiri', serif;
+            font-size: 4.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
         }
 
-        .content-wrapper { z-index: 10; width: 100%; max-width: 900px; }
-        h1, h2 { font-family: 'Amiri', serif; }
+        .hero p {
+            font-size: 1.4rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
 
-        /* --- تصميم العداد التنازلي الجديد --- */
-        .countdown-container {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 40px;
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 50px rgba(242, 113, 33, 0.2);
-        }
-        .timer {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .time-box {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 15px;
-            min-width: 70px;
-        }
-        .time-box span {
-            display: block;
-            font-size: 2.5rem;
+        .cta-button {
+            padding: 15px 40px;
+            background-color: transparent;
+            border: 2px solid var(--primary-gold);
+            color: var(--primary-gold);
+            font-size: 1.2rem;
             font-weight: bold;
-            color: var(--gold);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
         }
-        .time-label { font-size: 0.8rem; opacity: 0.8; }
 
-        /* لغز البداية */
-        .quiz-gate {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 30px;
-            backdrop-filter: blur(15px);
-            border: 2px solid var(--rose);
-            box-shadow: 0 0 30px rgba(233, 64, 87, 0.3);
+        .cta-button:hover {
+            background-color: var(--primary-gold);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
         }
-        .option-btn {
-            display: block; width: 100%; padding: 15px; margin: 10px 0;
-            border: none; border-radius: 15px; cursor: pointer;
-            font-size: 1.2rem; transition: 0.3s; background: white; color: #333;
-        }
-        .option-btn:hover { transform: scale(1.05); }
 
-        /* الأرشيف السري */
-        .archive-vault {
-            background: rgba(0,0,0,0.4);
-            border: 2px solid var(--gold);
-            padding: 30px;
-            border-radius: 20px;
-            margin-top: 20px;
-            box-shadow: 0 0 20px var(--gold);
-        }
-        .vault-input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--rose);
-            color: var(--gold);
-            padding: 15px;
+        /* تنسيق الفوتر */
+        footer {
             text-align: center;
-            font-size: 2rem;
-            width: 200px;
-            border-radius: 15px;
-            outline: none;
-            letter-spacing: 10px;
-        }
-
-        /* كروت الرسائل */
-        .message-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            width: 100%;
-        }
-        .msg-card {
-            background: rgba(255,255,255,0.05);
             padding: 25px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 4px solid var(--rose);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .msg-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.15); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-
-        /* زجاجات الرسائل */
-        .bottles-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-top: 30px;}
-        .bottle {
-            width: 80px; height: 150px; background: rgba(100, 200, 255, 0.2);
-            border: 2px solid rgba(255,255,255,0.3); border-radius: 20px 20px 40px 40px;
-            position: relative; cursor: pointer; transition: 0.5s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .bottle::after { content: '📜'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; }
-        .bottle:hover { transform: translateY(-20px) rotate(15deg) scale(1.1); background: rgba(100, 200, 255, 0.4); }
-
-        .nav-btn {
-            background: linear-gradient(45deg, var(--rose), var(--gold));
-            border: none; color: white;
-            padding: 15px 40px; border-radius: 30px; cursor: pointer;
-            font-size: 1.2rem; margin-top: 40px; transition: 0.3s;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(233, 64, 87, 0.4);
-        }
-        .nav-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(233, 64, 87, 0.6); }
-
-        .hidden { display: none !important; }
-        
-        #love-modal {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.95); z-index: 1000;
-            display: none; align-items: center; justify-content: center;
-        }
-        .modal-inner {
-            background: #fff; color: #222; padding: 40px; border-radius: 20px;
-            max-width: 600px; width: 90%; text-align: center; border-top: 8px solid var(--rose);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        .custom-alert {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: var(--rose); color: white; padding: 15px 30px;
-            border-radius: 10px; z-index: 2000; display: none;
+            background-color: var(--sec-bg);
+            color: var(--text-muted);
+            border-top: 1px solid #333;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
 
-    <canvas id="stars-canvas"></canvas>
-    <div id="alert-box" class="custom-alert"></div>
+    <header>
+        <a href="#" class="logo">الشيخ علي</a>
+        <nav>
+            <a href="#">الرئيسية</a>
+            <a href="#">المقالات</a>
+            <a href="#">المكتبة الصوتية</a>
+            <a href="#">اتصل بنا</a>
+        </nav>
+    </header>
 
-    <!-- 1. شاشة العداد التنازلي (مضبوطة لـ 31/12 الساعة 12 منتصف الليل) -->
-    <section id="countdown-section">
-        <div class="content-wrapper countdown-container">
-            <h1 style="color: var(--gold); font-size: 2.5rem;">متحف لولو يفتح أبوابه قريباً.. ✨</h1>
-            <p style="font-size: 1.2rem;">باقي من الزمن القليل حتى تبدأ المفاجأة يا لولو..</p>
-            <div class="timer">
-                <div class="time-box"><span id="days">00</span><div class="time-label">أيام</div></div>
-                <div class="time-box"><span id="hours">00</span><div class="time-label">ساعات</div></div>
-                <div class="time-box"><span id="minutes">00</span><div class="time-label">دقائق</div></div>
-                <div class="time-box"><span id="seconds">00</span><div class="time-label">ثواني</div></div>
-            </div>
-        </div>
+    <section class="hero">
+        <h1>الشيخ علي</h1>
+        <p>مرحباً بكم في المنصة الرسمية. نسعى لتقديم المحتوى الهادف بطابع عصري ومتميز، ليكون مرجعاً موثوقاً لكل باحث عن المعرفة.</p>
+        <a href="#" class="cta-button">تصفح المحتوى</a>
     </section>
 
-    <!-- 2. لغز البداية -->
-    <section id="gate-section" class="hidden">
-        <div class="content-wrapper quiz-gate" id="quiz-gate">
-            <h1 style="color: var(--rose); font-size: 2.5rem;">لغز العبور لقلب لولو.. 🧐</h1>
-            <p style="font-size: 1.4rem;">قبل ما تشوفي المفاجأة، لازم تثبتي إنك "لول" الحقيقية..</p>
-            <p style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px;">إيه هي أكتر أكلة "أنا" بموت فيها؟</p>
-            <div id="options">
-                <button class="option-btn" onclick="checkAnswer(this, 'wrong')">كشري </button>
-                <button class="option-btn" onclick="checkAnswer(this, 'correct')">شاورما </button>
-                <button class="option-btn" onclick="checkAnswer(this, 'wrong')">كبدة </button>
-            </div>
-            <p id="hint" style="margin-top: 20px; font-style: italic; color: var(--gold); min-height: 24px;"></p>
-        </div>
-    </section>
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 - موقع الشيخ علي</p>
+    </footer>
 
-    <!-- 3. محتوى المفاجآت الكامل -->
-    <div id="main-content" class="hidden">
-        
-        <!-- الترحيب بعيد الميلاد -->
-        <!-- رسالة عيد الميلاد -->
-        <section id="section1">
-            <div class="content-wrapper birthday-banner">
-                <h1 style="font-size: 4rem; color: var(--gold); margin-bottom: 10px;">كل سنة وأنتي طيبة يا لول 🎂</h1>
-                <h2 style="font-size: 2rem;">يا أجمل من كبر سنة، ويا أغلى ما أملك..</h2>
-                <div style="font-size: 1.3rem; line-height: 2; max-width: 700px; margin: 30px auto; background: rgba(255,255,255,0.05); padding: 30px; border-radius: 20px;">
-                    اليوم مش مجرد يوم عادي، ده اليوم اللي نور فيه العالم بيكي. 
-                    كل سنة وأنتي بطلة قصتي، وسر سعادتي، والضحكة اللي بتخلي الدنيا أهون. 
-                    عملتلك الرحلة دي عشان كل ركن فيها يقولك قد إيه أنتي غالية.. 💖
-                </div>
-                <button class="nav-btn" onclick="scrollToId('section2')">ابدأي في اكتشاف رسائلي ليكي.. ✨</button>
-            </div>
-        </section>
-
-        <!-- الأرشيف السري (الخزنة) -->
-        <section id="section-vault">
-            <div class="content-wrapper">
-                <h2 style="color: var(--gold); font-size: 2.5rem;">خزنة رسائل لولو السرية 🔐</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 20px;">اكتبي الباسورد لفتح الرسائل المخفية:</p>
-                <div class="archive-vault">
-                    <input type="text" id="vaultCode" class="vault-input" placeholder="----" maxlength="4">
-                    <br>
-                    <button class="nav-btn" onclick="unlockVault()">فتح الخزنة</button>
-                </div>
-                
-                <div id="secret-messages" class="hidden" style="margin-top: 60px;">
-                    <h3 style="color: var(--rose); margin-bottom: 30px;">رسائل لم تُقرأ من قبل.. 💌</h3>
-                    <div class="message-grid">
-                        <div class="msg-card" onclick="openMessage('أول انطباع ✨', 'عارفة يا لول؟ أول مرة شوفتك فيها، حسيت إن فيه حاجة في قلبي اتغيرت للأبد. أنتي مش مجرد صدفة، أنتي القدر الجميل اللي كنت مستنيه.')">
-                            <h3 style="color: var(--gold);">أول انطباع ✨</h3>
-                        </div>
-                        <div class="msg-card" onclick="openMessage('ساعات الكلام 🗣️', 'لولو.. أنتي الشخص الوحيد اللي مابزهقش من الكلام معاه بالساعات. صوتك وكلامك هما اللي بيهدوا أي توتر في يومي وبيرسموا ضحكتي.')">
-                            <h3 style="color: var(--gold);">ساعات الكلام 🗣️</h3>
-                        </div>
-                        <div class="msg-card" onclick="openMessage('وعدي ليكي 🤝', 'وعد مني ليكي يا أغلى لولو، هفضل جنبك في المرة قبل الحلوة، وهكون ليكي السند والأمان والكتف اللي بتميلي عليه طول ما أنا عايش.')">
-                            <h3 style="color: var(--gold);">وعدي ليكي 🤝</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- رسائل الزجاجات -->
-        <section id="section3">
-            <div class="content-wrapper">
-                <h2 style="color: #64c8ff; font-size: 2.5rem;">رسائل البحر الضائعة لـ لول 🌊</h2>
-                <p style="font-size: 1.2rem;">كل زجاجة كانت نبضة قلب ببعتها ليكي في خيالي، والنهاردة وصلت لشاطئ قلبك..</p>
-                <div class="bottles-container">
-                    <div class="bottle" onclick="openMessage('إلى لولو', 'لو كان للحب عنوان، هيكون عينيكي يا لول. أنتي بوصلتي اللي دايماً بتدلنّي على الصح في وسط زحمة الدنيا.')"></div>
-                    <div class="bottle" onclick="openMessage('حنين', 'بيوحشني وجودك حتى وأنتي معايا، مابشبعش من تفاصيلك الصغيرة اللي بتخليكي متميزة عن كل الناس يا لولو.')"></div>
-                    <div class="bottle" onclick="openMessage('أمنية العيد', 'أتمنى السنة دي تكون أجمل سنة في حياتك يا لول، وتحققي كل طموحاتك، وأكون دايماً السبب في سعادتك ونجاحك.')"></div>
-                </div>
-                <button class="nav-btn" onclick="scrollToId('section4')">الخاتمة.. ❤️</button>
-            </div>
-        </section>
-
-        <!-- النهاية -->
-        <section id="section4">
-            <div class="content-wrapper">
-                <h2 style="color: var(--rose); font-size: 3rem;">لماذا أنتي؟ 🌸</h2>
-                <p style="font-size: 1.4rem; max-width: 600px; margin: 0 auto;">لأنك لولو.. لأنك لول.. لأنك الإنسانة الوحيدة اللي قدرت تخلي قلبي يدق من تاني وتعلمني معنى السعادة الحقيقية.</p>
-                <div style="font-family: 'Dancing Script'; font-size: 4.5rem; color: var(--gold); margin-top: 40px; text-shadow: 0 0 15px var(--gold);">
-                    أحبكِ للأبد ❤️
-                </div>
-                <div style="margin-top: 30px; opacity: 0.6; font-size: 0.9rem;">
-                    1/1/2008 <br> اليوم الذي وُلد فيه الجمال
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- مودال الرسائل -->
-    <div id="love-modal">
-        <div class="modal-inner">
-            <h2 id="modal-title" style="color: var(--rose); font-family: 'Amiri', serif; font-size: 2rem;"></h2>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-            <p id="modal-text" style="font-size: 1.5rem; line-height: 1.8; font-family: 'Cairo', sans-serif;"></p>
-            <button class="nav-btn" onclick="closeModal()" style="margin-top: 20px; padding: 10px 30px;">رجوع للمتحف</button>
-        </div>
-    </div>
-
-    <audio id="piano-music" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
-    </audio>
-
-    <script>
-        // --- إعدادات العداد التنازلي ---
-        // تم ضبط الوقت على ليلة 31/12 الساعة 12:00 (أي بداية يوم 1/1)
-        const targetDate = new Date("January 1, 2026 00:00:00").getTime(); 
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            if (distance < 0) {
-                // عندما يحين الوقت
-                document.getElementById('countdown-section').classList.add('hidden');
-                document.getElementById('gate-section').classList.remove('hidden');
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
-        }
-
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // لغز الشاورما
-        function checkAnswer(btn, status) {
-            const hint = document.getElementById('hint');
-            if(status === 'correct') {
-                btn.style.background = "#4caf50";
-                btn.style.color = "white";
-                hint.innerText = "صح! برافو يا لولو قلبي.. جاري فتح عالمك.. 😍";
-                confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
-                setTimeout(() => {
-                    document.getElementById('gate-section').classList.add('hidden');
-                    document.getElementById('main-content').classList.remove('hidden');
-                    document.getElementById('piano-music').play().catch(() => {});
-                    initStars();
-                    drawStars();
-                }, 1500);
-            } else {
-                btn.style.background = "#f44336";
-                btn.style.color = "white";
-                hint.innerText = "لأ طبعاً! فكري تاني يا لولو.. الأكلة اللي بموت فيها! 😂";
-                setTimeout(() => {
-                    btn.style.background = "white";
-                    btn.style.color = "#333";
-                }, 1000);
-            }
-        }
-
-        // فتح الخزنة بكود 0962
-        function unlockVault() {
-            const code = document.getElementById('vaultCode').value;
-            if(code === "0962") {
-                document.getElementById('secret-messages').classList.remove('hidden');
-                confetti({ particleCount: 150, colors: ['#ffd700', '#ff4b82'], spread: 80 });
-                showAlert("تم فتح الخزنة بنجاح يا لول! ❤️");
-                setTimeout(() => {
-                    document.getElementById('secret-messages').scrollIntoView({ behavior: 'smooth' });
-                }, 500);
-            } else {
-                showAlert("رمز خطأ! يا لولو");
-            }
-        }
-
-        function showAlert(msg) {
-            const box = document.getElementById('alert-box');
-            box.innerText = msg;
-            box.style.display = "block";
-            setTimeout(() => box.style.display = "none", 3000);
-        }
-
-        // النجوم في الخلفية
-        const canvas = document.getElementById('stars-canvas');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-        function initStars() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            stars = [];
-            for(let i=0; i<250; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2.5,
-                    opacity: Math.random(),
-                    speed: Math.random() * 0.02
-                });
-            }
-        }
-        function drawStars() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            stars.forEach(s => {
-                s.opacity += s.speed;
-                if(s.opacity > 1 || s.opacity < 0) s.speed = -s.speed;
-                ctx.globalAlpha = Math.abs(s.opacity);
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
-                ctx.fill();
-            });
-            requestAnimationFrame(drawStars);
-        }
-
-        // المودال والرسائل
-        function openMessage(title, text) {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-text').innerText = text;
-            document.getElementById('love-modal').style.display = "flex";
-            confetti({ particleCount: 40, spread: 50, origin: { y: 0.8 } });
-        }
-        function closeModal() { document.getElementById('love-modal').style.display = "none"; }
-        function scrollToId(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
-
-        window.addEventListener('resize', initStars);
-        window.onload = initStars;
-    </script>
 </body>
 </html>
