@@ -3,99 +3,699 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عرض العبارة النصية الاحترافية</title>
-    
-    <!-- مكتبة Tailwind CSS للتنسيق -->
+    <title>إلى مريم • حبيبة • شهد | رسالة حب واعتذار وتوقير من حماده</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- خطوط جوجل العربية (Cairo & Tajawal) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
-    
-    <!-- أيقونات FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&family=Reem+Kufi:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        velvet: {
+                            900: '#1a000c',
+                            800: '#2d0517',
+                            700: '#4a0826',
+                            600: '#700c3a',
+                        },
+                        rosegold: {
+                            light: '#fce4ec',
+                            DEFAULT: '#e0a96d',
+                            dark: '#b37d46',
+                        },
+                        crimson: {
+                            glow: '#ff1744',
+                            deep: '#880e4f',
+                        }
+                    },
+                    fontFamily: {
+                        amiri: ['Amiri', 'serif'],
+                        cairo: ['Cairo', 'sans-serif'],
+                        kufi: ['Reem Kufi', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'shimmer': 'shimmer 3s infinite linear',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(3deg)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.8', filter: 'drop-shadow(0 0 15px rgba(224, 169, 109, 0.6))' },
+                            '50%': { opacity: '1', filter: 'drop-shadow(0 0 30px rgba(255, 23, 68, 0.9))' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #090d16;
+            background-color: #0d0107;
+            color: #fce4ec;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* ----------------------------------------------------
-           تأثير تدرج الألوان المتحرك على النص
-           Animated Gradient Text Effect
-        ---------------------------------------------------- */
-        .gradient-text-animated {
-            background: linear-gradient(
-                135deg, 
-                #a855f7 0%, 
-                #ec4899 25%, 
-                #3b82f6 50%, 
-                #06b6d4 75%, 
-                #a855f7 100%
-            );
-            background-size: 300% 300%;
+        /* Ambient Glassmorphism */
+        .glass-card {
+            background: rgba(45, 5, 23, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(224, 169, 109, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card-hover {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(224, 169, 109, 0.6);
+            box-shadow: 0 15px 45px 0 rgba(255, 23, 68, 0.35);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0107;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #700c3a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e0a96d;
+        }
+
+        /* Glowing Text Effects */
+        .text-glow-rosegold {
+            text-shadow: 0 0 12px rgba(224, 169, 109, 0.6), 0 0 25px rgba(224, 169, 109, 0.3);
+        }
+        .text-glow-crimson {
+            text-shadow: 0 0 15px rgba(255, 23, 68, 0.7), 0 0 30px rgba(136, 14, 79, 0.5);
+        }
+
+        /* Falling Petals & Particles Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Gold Gradient Text */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fff2d6 0%, #e0a96d 50%, #b37d46 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradientMove 8s ease infinite;
         }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* ----------------------------------------------------
-           تأثير الزجاج المضبب والحدود المضيئة (Glassmorphism)
-        ---------------------------------------------------- */
-        .glass-card {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                        0 0 40px rgba(168, 85, 247, 0.15);
-        }
-
-        /* ----------------------------------------------------
-           تأثير الهالة الضوئية خلف البطاقة (Glow Blob)
-        ---------------------------------------------------- */
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.5;
-            pointer-events: none;
-            animation: orbPulse 6s ease-in-out infinite alternate;
-        }
-
-        @keyframes orbPulse {
-            0% { transform: scale(0.9); opacity: 0.4; }
-            100% { transform: scale(1.15); opacity: 0.7; }
+        .crimson-gradient-text {
+            background: linear-gradient(135deg, #ff80ab 0%, #ff1744 50%, #c2185b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
-<body class="min-h-screen w-full flex items-center justify-center p-4 sm:p-8 relative overflow-hidden text-slate-100">
+<body class="relative selection:bg-rosegold selection:text-velvet-900">
 
-    <!-- خلفية الهالة الضوئية العلوية والسفلية -->
-    <div class="glow-orb w-80 h-80 sm:w-96 sm:h-96 bg-purple-600 -top-10 -right-10"></div>
-    <div class="glow-orb w-80 h-80 sm:w-96 sm:h-96 bg-cyan-600 -bottom-10 -left-10" style="animation-delay: 3s;"></div>
+    <!-- Canvas Background for Falling Petals/Stars -->
+    <canvas id="particle-canvas"></canvas>
 
-    <!-- البطاقة الرئيسية في منتصف الشاشة (تحتوي على العبارة فقط) -->
-    <main class="w-full max-w-4xl glass-card rounded-3xl p-8 sm:p-16 text-center relative z-10 transition-all duration-300 hover:border-purple-500/40">
-        
-        <!-- ====================================================
-             تنبيه: غير العبارة النصية الخاصة بك من هنا بسهولة!
-             CHANGE YOUR QUOTE TEXT HERE
-        ==================================================== -->
-        <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-relaxed sm:leading-tight tracking-wide gradient-text-animated select-none">
-            " مريم "
-        </h1>
-        <!-- ==================================================== -->
+    <!-- Audio Player Toggle -->
+    <div class="fixed top-6 left-6 z-50">
+        <button id="audio-toggle" onclick="toggleAudio()" class="glass-card px-4 py-3 rounded-full flex items-center gap-3 border border-rosegold/40 hover:border-rosegold transition-all duration-300 shadow-lg text-rosegold hover:text-white group">
+            <i id="audio-icon" class="fas fa-music animate-spin-slow"></i>
+            <span id="audio-text" class="text-xs font-semibold tracking-wider">تشغيل اللحن الهادئ</span>
+        </button>
+    </div>
 
-    </main>
+    <!-- MAIN WRAPPER -->
+    <div class="relative z-10">
 
+        <!-- HERO SECTION (الافتتاحية العظيمة) -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden py-20">
+            <!-- Ambient Glow Spheres -->
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-crimson-glow/20 rounded-full blur-[120px] pointer-events-none"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-rosegold/15 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <div class="animate-float mb-6">
+                <span class="inline-block px-6 py-2 rounded-full glass-card text-rosegold text-sm font-semibold tracking-widest border border-rosegold/30 uppercase shadow-inner">
+                    <i class="fas fa-crown text-amber-400 ml-2"></i> رسالة حُب وإجلال وإعتذار خاصّة
+                </span>
+            </div>
+
+            <!-- Dynamic Three Names Header -->
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black font-kufi tracking-wide mb-6 leading-tight">
+                <span class="gold-gradient-text inline-block hover:scale-105 transition-transform duration-300">مريم</span>
+                <span class="text-crimson-glow mx-2 md:mx-4 font-light">•</span>
+                <span class="crimson-gradient-text inline-block hover:scale-105 transition-transform duration-300">حبيبة</span>
+                <span class="text-crimson-glow mx-2 md:mx-4 font-light">•</span>
+                <span class="gold-gradient-text inline-block hover:scale-105 transition-transform duration-300">شهد</span>
+            </h1>
+
+            <p class="max-w-3xl text-lg md:text-2xl text-pink-100/90 font-amiri leading-relaxed mb-10 px-4">
+                "إلى التاج المرفوع على رأس قلبي، إلى مَنْ تَجَمَّعَتْ فيها كل معاني الرقة، العظمة، والحَلاوة.. 
+                رسالة توقير واعتذار تصدر من أعمق نقطة في فؤاد محبكِ الأبدي <strong class="text-rosegold font-bold underline decoration-rosegold/50 underline-offset-8">حماده</strong>."
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
+                <a href="#portal-section" class="px-8 py-4 rounded-full bg-gradient-to-r from-crimson-glow via-crimson-deep to-velvet-700 text-white font-bold shadow-lg shadow-crimson-glow/30 hover:shadow-crimson-glow/60 hover:scale-105 transition-all duration-300 flex items-center gap-3 border border-pink-400/30">
+                    <span>افتحي رسالة قلبي</span>
+                    <i class="fas fa-heart text-pink-200 animate-pulse"></i>
+                </a>
+                <a href="#apology-section" class="px-8 py-4 rounded-full glass-card text-rosegold hover:text-white font-semibold hover:bg-rosegold/20 transition-all duration-300 border border-rosegold/40 flex items-center gap-2">
+                    <span>رسالة الاعتذار والتقدير</span>
+                    <i class="fas fa-envelope-open-text"></i>
+                </a>
+            </div>
+
+            <!-- Floating Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-rosegold/60 animate-bounce">
+                <span class="text-xs font-light">انزلي للأسفل</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </section>
+
+
+        <!-- THREE NAMES PORTAL (مملكة الأسماء الثلاثة) -->
+        <section id="portal-section" class="py-24 px-4 max-w-7xl mx-auto relative">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold font-kufi gold-gradient-text mb-4">مملكة الأسماء الثلاثة</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-transparent via-rosegold to-transparent mx-auto mb-4"></div>
+                <p class="text-pink-200/80 font-amiri text-xl">ثلاثة أسماء لجوهرة واحدة نادرة، اضغطي على كل اسم لاكتشاف قصيدتكِ الخاصة</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- CARD 1: MARIAM -->
+                <div onclick="openNameModal('mariam')" class="glass-card glass-card-hover rounded-3xl p-8 relative overflow-hidden group cursor-pointer border border-rosegold/30">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-crimson-glow/10 rounded-full blur-2xl group-hover:bg-crimson-glow/30 transition-all"></div>
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rosegold/30 to-crimson-deep/40 flex items-center justify-center mb-6 border border-rosegold/40 text-rosegold text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold font-kufi text-rosegold mb-2">مَرْيَم</h3>
+                    <p class="text-xs text-pink-300/70 font-semibold mb-4 tracking-widest uppercase">النقاء • السمو • العظمة</p>
+                    <p class="text-pink-100/80 font-amiri text-lg leading-relaxed mb-6">
+                        اسمٌ كالنور، يفيض بالطهر والرفعة والوقار. أنتِ كالمريمية المباركة التي تطيب بها الروح وتسمو بها النفس...
+                    </p>
+                    <div class="flex items-center gap-2 text-rosegold font-bold text-sm group-hover:translate-x-[-6px] transition-transform">
+                        <span>اقرئي قصيدة مريم</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </div>
+
+                <!-- CARD 2: HABIBA -->
+                <div onclick="openNameModal('habiba')" class="glass-card glass-card-hover rounded-3xl p-8 relative overflow-hidden group cursor-pointer border border-crimson-glow/30">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-rosegold/10 rounded-full blur-2xl group-hover:bg-rosegold/30 transition-all"></div>
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-crimson-glow/30 to-velvet-700/50 flex items-center justify-center mb-6 border border-crimson-glow/40 text-crimson-glow text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold font-kufi crimson-gradient-text mb-2">حَبِيبَة</h3>
+                    <p class="text-xs text-pink-300/70 font-semibold mb-4 tracking-widest uppercase">سَكَنُ الرُّوحِ • حَبِيبَةُ العُمْر</p>
+                    <p class="text-pink-100/80 font-amiri text-lg leading-relaxed mb-6">
+                        أنتِ الحبيبة التي اختارها القلب وعقد معها وثاق العشق الأبدي. سكن الفؤاد وملاذه الآمن في كل وقت...
+                    </p>
+                    <div class="flex items-center gap-2 text-crimson-glow font-bold text-sm group-hover:translate-x-[-6px] transition-transform">
+                        <span>اقرئي قصيدة حبيبة</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </div>
+
+                <!-- CARD 3: SHAHD -->
+                <div onclick="openNameModal('shahd')" class="glass-card glass-card-hover rounded-3xl p-8 relative overflow-hidden group cursor-pointer border border-rosegold/30">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/30 transition-all"></div>
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-rosegold/40 flex items-center justify-center mb-6 border border-amber-300/40 text-amber-300 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold font-kufi text-amber-200 mb-2">شَهْد</h3>
+                    <p class="text-xs text-amber-200/70 font-semibold mb-4 tracking-widest uppercase">حَلاوَةُ الأَيَّامِ • لَذَّةُ الحَيَاة</p>
+                    <p class="text-pink-100/80 font-amiri text-lg leading-relaxed mb-6">
+                        الشهد الذي يحلّي مرار الأيام، والبسمة التي تشرق بها دنياي. معكِ تحلو كل اللحظات وتزهر الأوقات...
+                    </p>
+                    <div class="flex items-center gap-2 text-amber-300 font-bold text-sm group-hover:translate-x-[-6px] transition-transform">
+                        <span>اقرئي قصيدة شهد</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SINCERE APOLOGY & VENERATION SECTION (رسالة الاعتذار والإجلال) -->
+        <section id="apology-section" class="py-24 px-4 relative max-w-5xl mx-auto">
+            <div class="glass-card rounded-3xl p-8 md:p-14 relative border-2 border-rosegold/40 shadow-2xl overflow-hidden">
+                <!-- Decorative Corner Accents -->
+                <div class="absolute top-0 right-0 p-6 text-rosegold/20 text-6xl font-amiri select-none">﴿</div>
+                <div class="absolute bottom-0 left-0 p-6 text-rosegold/20 text-6xl font-amiri select-none">﴾</div>
+
+                <div class="text-center mb-10">
+                    <span class="text-xs uppercase tracking-widest text-rosegold font-semibold bg-rosegold/10 px-4 py-1.5 rounded-full border border-rosegold/30">
+                        اعتذار وإجلال من حماده
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-bold font-kufi crimson-gradient-text mt-4 mb-2">رسالة توقير واعتذار صادقة</h2>
+                    <p class="text-pink-200/70 font-amiri text-lg">إلى من لا يكتمل يومي إلا برضاها</p>
+                </div>
+
+                <div class="space-y-6 text-pink-100/90 font-amiri text-xl leading-loose text-justify md:text-right">
+                    <p class="first-letter:text-4xl first-letter:font-bold first-letter:text-rosegold">
+                        يا أميرتي الغالية <strong>(مريم • حبيبة • شهد)</strong>،
+                    </p>
+                    <p>
+                        أكتب لكِ هذه الكلمات بكامل التواضع، والتقدير، والإجلال الذي تستحقينه. إن كان قد بدر مني أي تقصير أو سهو أو فعلٍ أزعج قلبكِ الرقيق، فإنني أعتذر لكِ بملء قلبي وعقلي. قدركِ عندي أعظم من أي خلاف، ومكانتكِ في وجداني أسمى من أن تطالها الهفوات.
+                    </p>
+                    <p class="bg-velvet-800/60 p-6 rounded-2xl border-r-4 border-rosegold italic text-rosegold-light">
+                        "إن اعتذاري لكِ ليس مجرد كلمات تُقال، بل هو إقرارٌ بضرورة حماية قلبكِ النقي من أي حزن، وتأكيدٌ على أن مكانتكِ المرفوعة ستظل دائماً في أعلى مقام."
+                    </p>
+                    <p>
+                        أتعهد لكِ بالرعاية الدائمة، والاحترام المتبادل، والدعم غير المشروط. أنتِ لستِ فقط حبيبة العمر، بل أنتِ السند والجمال والضوء الذي ينير دربي.
+                    </p>
+                </div>
+
+                <!-- Heartfelt Promises / Glowing Interactive Badges -->
+                <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 border-t border-rosegold/20">
+                    <div class="p-4 rounded-xl bg-velvet-900/60 border border-rosegold/20 text-center">
+                        <i class="fas fa-shield-halved text-rosegold text-2xl mb-2"></i>
+                        <h4 class="font-bold text-sm text-rosegold">احترام دائم</h4>
+                        <p class="text-xs text-pink-200/70 mt-1">توقير مقامكِ السامي أولوية أولى</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-velvet-900/60 border border-rosegold/20 text-center">
+                        <i class="fas fa-hand-holding-heart text-crimson-glow text-2xl mb-2"></i>
+                        <h4 class="font-bold text-sm text-pink-200">حب غير مشروط</h4>
+                        <p class="text-xs text-pink-200/70 mt-1">عشق يزداد مع كل إشراقة شمس</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-velvet-900/60 border border-rosegold/20 text-center">
+                        <i class="fas fa-infinity text-amber-300 text-2xl mb-2"></i>
+                        <h4 class="font-bold text-sm text-amber-200">عهود أبديّة</h4>
+                        <p class="text-xs text-pink-200/70 mt-1">وعدٌ من حماده بالوفاء والتفاهم</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- LOVE & PRAISE VAULT (ديوان الغزل والتقدير) -->
+        <section class="py-20 px-4 max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold font-kufi gold-gradient-text mb-4">ديوان الغزل والتقدير</h2>
+                <p class="text-pink-200/80 font-amiri text-xl">صفات تجعل من (مريم • حبيبة • شهد) استثنائية في عين حماده</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="glass-card p-6 rounded-2xl border border-rosegold/20 hover:border-rosegold/60 transition-all">
+                    <div class="text-rosegold text-3xl mb-4"><i class="fas fa-smile-beam"></i></div>
+                    <h3 class="text-xl font-bold font-kufi mb-2 text-pink-100">ابتسامتكِ الساحرة</h3>
+                    <p class="text-pink-200/80 font-amiri text-base">حين تبتسمين، يتغير وجه العالم ويبدأ الربيع في التفتح برحابة وجداني.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-rosegold/20 hover:border-rosegold/60 transition-all">
+                    <div class="text-crimson-glow text-3xl mb-4"><i class="fas fa-feather-alt"></i></div>
+                    <h3 class="text-xl font-bold font-kufi mb-2 text-pink-100">رقة قلبكِ والنقاء</h3>
+                    <p class="text-pink-200/80 font-amiri text-base">قلبٌ كأبياض السحاب، يفيض بالحنان والمحبة ويتسع للكون بأكمله.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-rosegold/20 hover:border-rosegold/60 transition-all">
+                    <div class="text-amber-300 text-3xl mb-4"><i class="fas fa-brain"></i></div>
+                    <h3 class="text-xl font-bold font-kufi mb-2 text-pink-100">حكمتكِ ورجاحة عقلكِ</h3>
+                    <p class="text-pink-200/80 font-amiri text-base">تجمعين بين الأنوثة الرقيقة والفكر الثاقب الذي ينير كل قرار.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-rosegold/20 hover:border-rosegold/60 transition-all">
+                    <div class="text-rosegold text-3xl mb-4"><i class="fas fa-eye"></i></div>
+                    <h3 class="text-xl font-bold font-kufi mb-2 text-pink-100">سحر نظراتكِ</h3>
+                    <p class="text-pink-200/80 font-amiri text-base">في عينيكِ حكايات من الأمان والعاطفة التي تجعلني أتأمل جمال الكون.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-rosegold/20 hover:border-rosegold/60 transition-all">
+                    <div class="text-crimson-glow text-3xl mb-4"><i class="fas fa-gem"></i></div>
+                    <h3 class="text-xl font-bold font-kufi mb-2 text-pink-100">مكانتكِ النادرة</h3>
+                    <p class="text-pink-200/80 font-amiri text-base">أنتِ الجوهرة الفريدة التي لا تُقدّر بثمان، والتاج المرفوع على عرش الفؤاد.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-rosegold/20 hover:border-rosegold/60 transition-all">
+                    <div class="text-amber-300 text-3xl mb-4"><i class="fas fa-sun"></i></div>
+                    <h3 class="text-xl font-bold font-kufi mb-2 text-pink-100">إشراقة وجودكِ</h3>
+                    <p class="text-pink-200/80 font-amiri text-base">وجودكِ بجانبي يجعل لكل ثانية معنى، ويهب الحياة طعماً مختلفاً ملؤه الشغف.</p>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- INTERACTIVE TOUCHPOINTS (لمسات تفاعلية) -->
+        <section class="py-20 px-4 max-w-4xl mx-auto text-center">
+            <div class="glass-card p-10 md:p-16 rounded-3xl border border-rosegold/40 relative overflow-hidden">
+                <i class="fas fa-quote-right text-rosegold/10 text-8xl absolute top-4 right-4"></i>
+
+                <h2 class="text-3xl font-bold font-kufi text-rosegold mb-6">مولّدة الرسائل الوجدانية</h2>
+                <p class="text-pink-200/80 font-amiri text-lg mb-8">اضغطي على الزر أدناه لتلقي همسة رومانسية خاصة من حماده</p>
+
+                <!-- Dynamic Quote Box -->
+                <div id="quote-box" class="min-h-[140px] flex items-center justify-center p-6 rounded-2xl bg-velvet-900/80 border border-rosegold/30 mb-8 transition-all duration-500">
+                    <p id="quote-text" class="text-xl md:text-2xl font-amiri text-rosegold-light leading-relaxed">
+                        "مريم، حبيبة، شهد... ثلاثة أسماء تسكن في قلبي كأنها ألحانٌ نادرة لا تمل الأيام من عزفها."
+                    </p>
+                </div>
+
+                <button onclick="generateRandomQuote()" class="px-8 py-4 rounded-full bg-gradient-to-r from-rosegold to-rosegold-dark text-velvet-900 font-bold hover:brightness-110 shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-3 mx-auto">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                    <span>افتحي همسة جديدة من حماده</span>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ACCEPT APOLOGY / RECONCILIATION BUTTON -->
+        <section class="py-16 text-center px-4">
+            <div class="max-w-2xl mx-auto glass-card p-10 rounded-3xl border border-pink-500/30">
+                <h3 class="text-2xl md:text-3xl font-bold font-kufi text-pink-100 mb-4">هل قبلتِ اعتذار حماده؟</h3>
+                <p class="text-pink-200/80 font-amiri text-lg mb-8">اضغطي هنا لترسلي بسمة قبول وتملئي الشاشة بالنجوم والقلوب البرّاقة</p>
+
+                <button onclick="acceptApology()" class="px-10 py-5 rounded-full bg-gradient-to-r from-crimson-glow via-pink-600 to-rosegold text-white font-extrabold text-xl shadow-xl hover:shadow-crimson-glow/50 hover:scale-110 active:scale-95 transition-all duration-300 flex items-center gap-3 mx-auto group">
+                    <i class="fas fa-heart text-2xl group-hover:scale-125 transition-transform"></i>
+                    <span>نعم، قبلت اعتذارك بحب ❤️</span>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- FOOTER (التوقيع الخالد) -->
+        <footer class="py-12 border-t border-rosegold/20 text-center relative overflow-hidden">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-rosegold to-crimson-glow p-0.5 mx-auto mb-4">
+                    <div class="w-full h-full bg-velvet-900 rounded-full flex items-center justify-center text-rosegold text-xl">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold font-kufi gold-gradient-text mb-2">مريم • حبيبة • شهد</h3>
+                <p class="text-pink-200/70 font-amiri text-lg mb-6">كتبت بكامل الحب، التقدير، والتوقير الخالص</p>
+                
+                <div class="inline-block px-6 py-2 rounded-full glass-card border border-rosegold/30 text-rosegold font-bold font-cairo">
+                    محبكِ الأبدي: <span class="text-white">حماده (Hamada)</span>
+                </div>
+
+                <p class="text-xs text-pink-300/40 mt-8 font-cairo">جميع الحقوق محفوظة لقلب حبيبة العمر © 2026</p>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <!-- MODAL FOR POEMS -->
+    <div id="poem-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-card max-w-2xl w-full p-8 md:p-12 rounded-3xl border-2 border-rosegold relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="modal-content">
+            <button onclick="closeNameModal()" class="absolute top-6 left-6 text-rosegold hover:text-white text-2xl transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <span id="modal-subtitle" class="text-xs uppercase tracking-widest text-rosegold font-semibold"></span>
+                <h3 id="modal-title" class="text-4xl font-bold font-kufi text-white mt-2"></h3>
+            </div>
+
+            <div id="modal-body" class="font-amiri text-xl md:text-2xl text-pink-100 leading-loose text-center space-y-4 my-8">
+                <!-- Poem content dynamically injected -->
+            </div>
+
+            <div class="text-center">
+                <button onclick="closeNameModal()" class="px-8 py-3 rounded-full bg-rosegold/20 hover:bg-rosegold text-rosegold hover:text-velvet-900 border border-rosegold font-bold transition-all duration-300">
+                    إغلاق الرسالة
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Audio Toggle Feature (Synthesizer Audio Effect / Ambient Web Audio API)
+        let audioCtx = null;
+        let isPlaying = false;
+        let oscillator = null;
+        let gainNode = null;
+
+        function toggleAudio() {
+            const btnText = document.getElementById('audio-text');
+            const btnIcon = document.getElementById('audio-icon');
+
+            if (!isPlaying) {
+                try {
+                    if (!audioCtx) {
+                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    
+                    // Create ambient chord oscillator
+                    oscillator = audioCtx.createOscillator();
+                    gainNode = audioCtx.createGain();
+
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(220, audioCtx.currentTime); // A3 note
+                    
+                    // Gentle ambient volume
+                    gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 3);
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+
+                    oscillator.start();
+                    isPlaying = true;
+                    btnText.innerText = "إيقاف اللحن الهادئ";
+                    btnIcon.classList.remove('fa-music');
+                    btnIcon.classList.add('fa-pause');
+                } catch(e) {
+                    console.log("Audio play error", e);
+                }
+            } else {
+                if (gainNode && audioCtx) {
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
+                    setTimeout(() => {
+                        oscillator.stop();
+                        isPlaying = false;
+                        btnText.innerText = "تشغيل اللحن الهادئ";
+                        btnIcon.classList.remove('fa-pause');
+                        btnIcon.classList.add('fa-music');
+                    }, 1000);
+                }
+            }
+        }
+
+        // Poems Data for Modals
+        const poems = {
+            mariam: {
+                title: "مَرْيَم .. طُهْرُ السَّمَاءِ وَنُورُ الفُؤَاد",
+                subtitle: "النقـاء والسمـو والعظمـة",
+                text: `
+                    يَا مَرْيَمُ العَذْبَةُ الأَنْفَاسِ يَا أَمَلِي <br>
+                    يَا نَفْحَةَ الطُّهْرِ فِي دُنْيَا مِنَ العَجَلِ <br><br>
+                    سَمَوْتِ فِي القَلْبِ حَتَّى صِرْتِ مَالِكَةً <br>
+                    عَرْشَ الوِجْدَانِ بِلا كِبْرٍ وَلا وَجَلِ <br><br>
+                    عَظِيمَةُ القَدْرِ فِي عَيْنِي وَفِي رُوحِي <br>
+                    وَلَنْ يَطَالَكِ غَيْرُ العِزِّ وَالخَجَلِ
+                `
+            },
+            habiba: {
+                title: "حَبِيبَة .. سَكَنُ الرُّوحِ وَنَبْضُ الحَيَاة",
+                subtitle: "سكن الروح وحبيبة العمر",
+                text: `
+                    حَبِيبَتِي يَا مَلاذَ الرُّوحِ فِي زَمَنِي <br>
+                    يَا نَبْضَ قَلْبِي وَيَا أُنْسِي وَيَا سَكَنِي <br><br>
+                    إِنِّي اعْتَذَرْتُ وَقَلْبِي كُلُّهُ أَمَلٌ <br>
+                    أَنْ تَغْفِرِي لِي فَمَا لِي عَنْكِ مِنْ بَدَلِ <br><br>
+                    أَنْتِ الحَيَاةُ وَأَنْتِ العِشْقُ يَا أَمَلِي <br>
+                    وَمَا سِوَاكِ بِهَذَا الكَوْنِ يَعْنِينِي
+                `
+            },
+            shahd: {
+                title: "شَهْد .. حَلاوَةُ الأَيَّامِ وَعَذُوبَةُ العُمْر",
+                subtitle: "حلاوة الأيام ولذة الحياة",
+                text: `
+                    يَا شَهْدُ يَا لَذَّةَ الأَيَّامِ فِي عُمُرِي <br>
+                    يَا بَسْمَةً تُشْرِقُ الدُّنْيَا بِهَا صُدَفِي <br><br>
+                    حَلاوَةُ العُمْرِ أَنْتِ حِينَ تَبتَسِمِي <br>
+                    وَيَنْزِلُ الغَيْثُ صَافِياً عَلَى الشَّغَفِ <br><br>
+                    دُومِي لِقَلْبِي صَفَاءً لا بَدِيلَ لَهُ <br>
+                    يَا شَهْدَ عَيْشِي وَيَا نُورِي وَيَا شَرَفِي
+                `
+            }
+        };
+
+        function openNameModal(nameKey) {
+            const modal = document.getElementById('poem-modal');
+            const modalContent = document.getElementById('modal-content');
+            const data = poems[nameKey];
+
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-subtitle').innerText = data.subtitle;
+            document.getElementById('modal-body').innerHTML = data.text;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+        }
+
+        function closeNameModal() {
+            const modal = document.getElementById('poem-modal');
+            const modalContent = document.getElementById('modal-content');
+
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+        }
+
+        // Random Quotes Generator for Hamada
+        const hamadaQuotes = [
+            "مريم، حبيبة، شهد... ثلاثة أسماء تسكن في قلبي كأنها ألحانٌ نادرة لا تمل الأيام من عزفها.",
+            "لو جمعتُ كل كلمات الشوق والاحترام في مجلدات العالم، لما وفّت جزءاً صغيراً من قدركِ العالي عندي.",
+            "اعتذاري لكِ هو رسالة محبة وعظم احترام.. أنتِ التاج الذي أفتخر به أمام العالم كله.",
+            "كل لحظة تجمعني بكِ هي عيدٌ صغير، وابتسامتكِ هي الهدف الأول والأخير لحماده.",
+            "قد تخطئ الكلمات، وقد تقصر الأفعال، لكن القلب يظل يفيض بالحب والتوقير الخالص لكِ وحدهكِ.",
+            "يا شهد أيامي، ويا سكن روحي، ويا طهر مريم.. أدامكِ الله لي ملكة على عرش الفؤاد."
+        ];
+
+        function generateRandomQuote() {
+            const quoteText = document.getElementById('quote-text');
+            const quoteBox = document.getElementById('quote-box');
+
+            quoteBox.style.opacity = '0';
+            quoteBox.style.transform = 'scale(0.95)';
+
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * hamadaQuotes.length);
+                quoteText.innerText = `"${hamadaQuotes[randomIndex]}"`;
+                quoteBox.style.opacity = '1';
+                quoteBox.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // Accept Apology Interactive Celebration Shower
+        function acceptApology() {
+            // Trigger particle shower
+            createHeartShower();
+
+            // Show Custom Toast
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-10 left-1/2 -translate-x-1/2 z-50 glass-card px-8 py-5 rounded-2xl border-2 border-rosegold text-white text-center shadow-2xl animate-bounce flex items-center gap-4';
+            toast.innerHTML = `
+                <i class="fas fa-heart text-crimson-glow text-3xl"></i>
+                <div>
+                    <h4 class="font-bold font-kufi text-lg text-rosegold">شكراً لكِ من أعمق نقطة في فؤادي!</h4>
+                    <p class="font-amiri text-sm text-pink-100">حماده يوعدكِ بأن يظل دائماً السند والحب والداعم الأبدي لكِ.</p>
+                </div>
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 1s ease';
+                setTimeout(() => toast.remove(), 1000);
+            }, 5000);
+        }
+
+        // Particles & Falling Petals Canvas Simulation
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * -height;
+                this.size = Math.random() * 4 + 2;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.speedX = Math.sin(Math.random() * Math.PI) * 0.8;
+                this.opacity = Math.random() * 0.7 + 0.3;
+                this.color = Math.random() > 0.5 ? '#e0a96d' : '#ff1744';
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 2;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+
+                // Draw glowing petal or star
+                ctx.beginPath();
+                ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        const particles = Array.from({ length: 65 }, () => new Particle());
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        // Heart Shower Burst Function
+        function createHeartShower() {
+            for (let i = 0; i < 40; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'fixed z-50 text-crimson-glow pointer-events-none animate-ping';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                heart.innerHTML = '<i class="fas fa-heart"></i>';
+                document.body.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 1500);
+            }
+        }
+    </script>
 </body>
 </html>
