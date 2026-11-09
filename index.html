@@ -99,17 +99,11 @@
                     </button>
                 </nav>
 
-                <!-- Actions: Cart & Admin Toggle -->
+                <!-- Actions: Cart Button (Clean Public Header) -->
                 <div class="flex items-center space-x-4 space-x-reverse">
-                    <!-- Admin Switch Button -->
-                    <button onclick="switchView('admin')" id="admin-toggle-btn" class="px-4 py-2 text-xs md:text-sm font-semibold rounded-xl border border-gold/40 text-gold hover:bg-gold hover:text-navy-dark transition duration-300 flex items-center gap-2">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <span id="admin-btn-text">لوحة التحكم</span>
-                    </button>
-
-                    <!-- Cart Button -->
-                    <button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-xl bg-navy-light text-gold border border-gold/30 hover:border-gold transition">
+                    <button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-xl bg-navy-light text-gold border border-gold/30 hover:border-gold transition flex items-center gap-2">
                         <i class="fa-solid fa-cart-shopping text-xl"></i>
+                        <span class="hidden sm:inline text-xs font-bold">سلة الشراء</span>
                         <span id="cart-count" class="absolute -top-2 -right-2 bg-red-600 text-white font-bold text-xs w-6 h-6 rounded-full flex items-center justify-center border-2 border-navy-dark">0</span>
                     </button>
                 </div>
@@ -117,10 +111,28 @@
         </div>
     </header>
 
+    <!-- Page Selector Switcher Floating Bar -->
+    <div class="bg-navy-light/90 border-b border-gold/30 text-xs py-2 px-4 backdrop-blur-md sticky top-20 z-30 shadow-lg">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-2 space-x-reverse text-slate-400">
+                <i class="fa-solid fa-layer-group text-gold"></i>
+                <span>التنقل بين الصفحات:</span>
+            </div>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <button onclick="switchView('shop')" id="btn-page-shop" class="px-3 py-1 rounded-lg bg-gold text-navy-dark font-bold transition">
+                    <i class="fa-solid fa-store ml-1"></i> 1. واجهة المتجر (main_site)
+                </button>
+                <button onclick="switchView('admin')" id="btn-page-admin" class="px-3 py-1 rounded-lg bg-navy-dark text-slate-300 border border-slate-700 hover:border-gold transition">
+                    <i class="fa-solid fa-user-lock ml-1"></i> 2. صفحة الإدارة (admin.html)
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content Container -->
     <main class="flex-grow">
         
-        <!-- ================= STORE VIEW ================= -->
+        <!-- ================= 1. STORE FRONT VIEW (main_site) ================= -->
         <div id="shop-view" class="space-y-12 pb-16">
             
             <!-- Hero Banner Section -->
@@ -265,100 +277,186 @@
             </section>
         </div>
 
-        <!-- ================= ADMIN DASHBOARD VIEW ================= -->
+        <!-- ================= 2. SEPARATE ADMIN DASHBOARD VIEW (admin_panel) ================= -->
         <div id="admin-view" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-            <div class="flex items-center justify-between border-b border-gold/30 pb-4">
-                <div>
-                    <h2 class="text-3xl font-bold gold-text-gradient">لوحة التحكم والإدارة</h2>
-                    <p class="text-slate-400 text-sm">إدارة منتجات مكتبة التلميذ، والأسعار، وإضافة المعروضات الجديدة</p>
+            
+            <!-- Login Password Protection Lock screen -->
+            <div id="admin-login-screen" class="max-w-md mx-auto my-12 glass-card p-8 rounded-3xl border border-gold/40 space-y-6 text-center">
+                <div class="w-16 h-16 rounded-full bg-gold/10 text-gold flex items-center justify-center text-3xl mx-auto border border-gold/30">
+                    <i class="fa-solid fa-lock"></i>
                 </div>
-                <button onclick="switchView('shop')" class="px-4 py-2 text-sm bg-navy-light border border-slate-700 hover:border-gold text-slate-300 rounded-xl transition">
-                    <i class="fa-solid fa-arrow-left ml-2"></i> العودة للمتجر
+                <div>
+                    <h3 class="text-2xl font-bold text-white">تسجيل الدخول للإدارة</h3>
+                    <p class="text-slate-400 text-xs mt-1">صفحة محمية خاصة بمالكي مكتبة التلميذ</p>
+                </div>
+                <div class="space-y-3">
+                    <input type="password" id="admin-pin-input" placeholder="أدخل كلمة المرور (الافتراضي: 1234)" class="w-full bg-navy-dark border border-slate-700 rounded-xl px-4 py-3 text-center text-gold tracking-widest focus:outline-none focus:border-gold">
+                    <p id="pin-error-msg" class="text-xs text-red-400 hidden">رمز المرور غير صحيح!</p>
+                </div>
+                <button onclick="verifyAdminPin()" class="w-full py-3 rounded-xl font-bold gold-gradient text-navy-dark hover:opacity-90 transition">
+                    <i class="fa-solid fa-key ml-1"></i> الدخول للوحة التحكم
                 </button>
             </div>
 
-            <!-- Stats Bar -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="glass-card p-5 rounded-2xl border border-gold/20">
-                    <p class="text-slate-400 text-xs">إجمالي المنتجات</p>
-                    <h4 id="stat-total-products" class="text-2xl font-black text-gold mt-1">0</h4>
-                </div>
-                <div class="glass-card p-5 rounded-2xl border border-gold/20">
-                    <p class="text-slate-400 text-xs">الكتالوجات والأقسام</p>
-                    <h4 class="text-2xl font-black text-gold mt-1">5</h4>
-                </div>
-                <div class="glass-card p-5 rounded-2xl border border-gold/20">
-                    <p class="text-slate-400 text-xs">حالة النظام</p>
-                    <h4 class="text-base font-bold text-emerald-400 mt-2"><i class="fa-solid fa-circle text-xs ml-1"></i> نشط ومحدث</h4>
-                </div>
-                <div class="glass-card p-5 rounded-2xl border border-gold/20">
-                    <p class="text-slate-400 text-xs">رقم الواتساب للطلبات</p>
-                    <h4 class="text-sm font-bold text-slate-200 mt-2">01067835779</h4>
-                </div>
-            </div>
-
-            <!-- Add New Product Form & Manage List -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <!-- Add Product Form -->
-                <div class="glass-card p-6 rounded-2xl border border-gold/30 h-fit space-y-4">
-                    <h3 class="text-lg font-bold text-gold border-b border-slate-800 pb-3">إضافة منتج جديد</h3>
-                    
-                    <form id="add-product-form" onsubmit="handleAddNewProduct(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">اسم المنتج</label>
-                            <input type="text" id="p-title" required placeholder="مثال: ملخص الرياضيات الصف الثالث" class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold">
+            <!-- Dashboard Main Content (Hidden until PIN verified) -->
+            <div id="admin-dashboard-content" class="hidden space-y-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-gold/30 pb-4 gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold">admin.html</span>
+                            <h2 class="text-3xl font-bold gold-text-gradient">لوحة التحكم المستقلة</h2>
                         </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">القسم</label>
-                            <select id="p-category" required class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold">
-                                <option value="summaries">ملخصات ومذكرات</option>
-                                <option value="stationery">أدوات مدرسية</option>
-                                <option value="calculators">آلات حاسبة وتكنولوجيا</option>
-                                <option value="printing">طباعة وتصوير</option>
-                                <option value="gifts">هدايا وإكسسوارات</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">السعر (جنيه)</label>
-                            <input type="number" id="p-price" min="0" required placeholder="50" class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">رابط الصورة (Image URL)</label>
-                            <input type="url" id="p-img" placeholder="ضع رابط الصورة هنا" class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold">
-                            <p class="text-[10px] text-slate-400 mt-1">اتركه فارغاً لاستخدام صورة افتراضية أنيقة</p>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">وصف المنتج</label>
-                            <textarea id="p-desc" rows="2" placeholder="وصف تفصيلي قصير للمنتج..." class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold"></textarea>
-                        </div>
-
-                        <button type="submit" class="w-full py-3 rounded-xl font-bold gold-gradient text-navy-dark hover:opacity-90 transition">
-                            <i class="fa-solid fa-plus ml-1"></i> إضافة للمتجر
+                        <p class="text-slate-400 text-sm mt-1">إدارة منتجات ومبيعات مكتبة التلميذ (أبو دياب غرب)</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="lockAdminPanel()" class="px-4 py-2 text-xs bg-red-500/10 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white rounded-xl transition">
+                            <i class="fa-solid fa-right-from-bracket ml-1"></i> قفل اللوحة
                         </button>
-                    </form>
+                        <button onclick="switchView('shop')" class="px-4 py-2 text-xs bg-navy-light border border-slate-700 hover:border-gold text-slate-300 rounded-xl transition">
+                            <i class="fa-solid fa-arrow-left ml-1"></i> العودة للمتجر
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Product Inventory Table -->
-                <div class="lg:col-span-2 glass-card p-6 rounded-2xl border border-gold/30 space-y-4">
-                    <h3 class="text-lg font-bold text-gold border-b border-slate-800 pb-3">قائمة المنتجات الحالية</h3>
+                <!-- Sales Overview & Analytics Bar -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="glass-card p-5 rounded-2xl border border-gold/20">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-400 text-xs">إجمالي المنتجات بالكتالوج</p>
+                                <h4 id="stat-total-products" class="text-2xl font-black text-gold mt-1">0</h4>
+                            </div>
+                            <i class="fa-solid fa-boxes-stacked text-gold/40 text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl border border-gold/20">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-400 text-xs">إجمالي الطلبات المستلمة</p>
+                                <h4 id="stat-total-orders" class="text-2xl font-black text-emerald-400 mt-1">12</h4>
+                            </div>
+                            <i class="fa-solid fa-cart-check text-emerald-400/40 text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl border border-gold/20">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-400 text-xs">تقدير المبيعات</p>
+                                <h4 class="text-2xl font-black text-gold mt-1">3,450 ج.م</h4>
+                            </div>
+                            <i class="fa-solid fa-coins text-gold/40 text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl border border-gold/20">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-400 text-xs">مسؤولي التواصل</p>
+                                <h4 class="text-xs font-bold text-slate-200 mt-2">أ/ أيمن (01067835779)<br>أ/ حماده (01011439841)</h4>
+                            </div>
+                            <i class="fa-solid fa-headset text-slate-500 text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add New Product Form & Manage List -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     
+                    <!-- Add / Edit Product Form -->
+                    <div class="glass-card p-6 rounded-2xl border border-gold/30 h-fit space-y-4">
+                        <h3 id="form-heading" class="text-lg font-bold text-gold border-b border-slate-800 pb-3">إضافة منتج جديد</h3>
+                        
+                        <form id="add-product-form" onsubmit="handleProductFormSubmit(event)" class="space-y-4">
+                            <input type="hidden" id="p-id">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">اسم المنتج</label>
+                                <input type="text" id="p-title" required placeholder="مثال: ملخص الرياضيات الصف الثالث" class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">القسم</label>
+                                <select id="p-category" required class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold">
+                                    <option value="summaries">ملخصات ومذكرات</option>
+                                    <option value="stationery">أدوات مدرسية</option>
+                                    <option value="calculators">آلات حاسبة وتكنولوجيا</option>
+                                    <option value="printing">طباعة وتصوير</option>
+                                    <option value="gifts">هدايا وإكسسوارات</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">السعر (جنيه)</label>
+                                <input type="number" id="p-price" min="0" required placeholder="50" class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">رابط الصورة (Image URL)</label>
+                                <input type="url" id="p-img" placeholder="ضع رابط الصورة هنا" class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold">
+                                <p class="text-[10px] text-slate-400 mt-1">اتركه فارغاً لاستخدام صورة افتراضية أنيقة</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">وصف المنتج</label>
+                                <textarea id="p-desc" rows="2" placeholder="وصف تفصيلي قصير للمنتج..." class="w-full bg-navy-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-gold"></textarea>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <button type="submit" id="form-submit-btn" class="flex-1 py-3 rounded-xl font-bold gold-gradient text-navy-dark hover:opacity-90 transition">
+                                    <i class="fa-solid fa-plus ml-1"></i> حفظ المنتج
+                                </button>
+                                <button type="button" id="form-cancel-btn" onclick="resetProductForm()" class="hidden px-4 py-3 rounded-xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700">إلغاء</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Product Inventory Table -->
+                    <div class="lg:col-span-2 glass-card p-6 rounded-2xl border border-gold/30 space-y-4">
+                        <h3 class="text-lg font-bold text-gold border-b border-slate-800 pb-3">إدارة المنتجات المخزنة</h3>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-right text-sm text-slate-300">
+                                <thead class="bg-navy-dark text-slate-400 text-xs">
+                                    <tr>
+                                        <th class="p-3">المنتج</th>
+                                        <th class="p-3">القسم</th>
+                                        <th class="p-3">السعر</th>
+                                        <th class="p-3 text-center">الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-products-table" class="divide-y divide-slate-800">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Recent Orders History Log -->
+                <div class="glass-card p-6 rounded-2xl border border-gold/30 space-y-4">
+                    <h3 class="text-lg font-bold text-gold border-b border-slate-800 pb-3">سجل الطلبات الواردة عبر الواتساب</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-right text-sm text-slate-300">
                             <thead class="bg-navy-dark text-slate-400 text-xs">
                                 <tr>
-                                    <th class="p-3">المنتج</th>
-                                    <th class="p-3">القسم</th>
-                                    <th class="p-3">السعر</th>
-                                    <th class="p-3 text-center">الإجراءات</th>
+                                    <th class="p-3">رقم الطلب</th>
+                                    <th class="p-3">تفاصيل المنتجات</th>
+                                    <th class="p-3">المبلغ الإجمالي</th>
+                                    <th class="p-3">الحالة</th>
                                 </tr>
                             </thead>
-                            <tbody id="admin-products-table" class="divide-y divide-slate-800">
-                                <!-- Dynamic Rows -->
+                            <tbody class="divide-y divide-slate-800 text-xs">
+                                <tr>
+                                    <td class="p-3 font-mono text-gold">#ORD-9021</td>
+                                    <td class="p-3">ملخص العلوم + كشكول سلك 200 ورقة</td>
+                                    <td class="p-3 font-bold text-white">130 ج.م</td>
+                                    <td class="p-3"><span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">مكتمل</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-mono text-gold">#ORD-9022</td>
+                                    <td class="p-3">آلة حاسبة كاسيو FX-991ARX</td>
+                                    <td class="p-3 font-bold text-white">750 ج.م</td>
+                                    <td class="p-3"><span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">مكتمل</span></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -475,7 +573,7 @@
                     </ul>
                 </div>
 
-                <!-- Direct WhatsApp Links -->
+                <!-- Direct WhatsApp Links & Admin Access Footnote -->
                 <div class="space-y-3 flex flex-col items-center md:items-start">
                     <h5 class="font-bold text-gold text-sm">تواصل مباشر سريع</h5>
                     <div class="flex flex-col gap-2 w-full max-w-xs">
@@ -490,8 +588,11 @@
 
             </div>
 
-            <div class="border-t border-slate-800 pt-6 text-center text-xs text-slate-500">
+            <div class="border-t border-slate-800 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
                 <p>جميع الحقوق محفوظة &copy; 2026 - مكتبة التلميذ (أبو دياب غرب)</p>
+                <button onclick="switchView('admin')" class="text-slate-600 hover:text-gold transition text-[11px]">
+                    <i class="fa-solid fa-user-gear ml-1"></i> دخول الإدارة الخاص (admin.html)
+                </button>
             </div>
         </div>
     </footer>
@@ -551,6 +652,10 @@
             }
         ];
 
+        // Admin Security & State
+        let isAdminLoggedIn = false;
+        const DEFAULT_PIN = "1234";
+
         // Shopping Cart State
         let cart = [];
 
@@ -560,7 +665,7 @@
             renderAdminProducts();
         });
 
-        // Render Store Products Grid
+        // Store Logic
         function renderProducts(categoryFilter = 'all') {
             const container = document.getElementById('products');
             container.innerHTML = '';
@@ -585,7 +690,6 @@
                 
                 card.innerHTML = `
                     <div>
-                        <!-- Image Container with HTML Placeholder Guide Comment -->
                         <div class="relative w-full aspect-[4/3] bg-navy-dark overflow-hidden">
                             <!-- 🔴 ضع رابط صورتك هنا مكان Image Placeholder 🔴 -->
                             <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x300/0f172a/D4AF37?text=مكتبة+التلميذ';">
@@ -620,7 +724,6 @@
             });
         }
 
-        // Category Filter Logic
         function filterCategory(cat) {
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 if (btn.dataset.cat === cat) {
@@ -632,7 +735,6 @@
             renderProducts(cat);
         }
 
-        // Helper: Get Category Arabic Title
         function getCategoryName(cat) {
             const names = {
                 'summaries': 'ملخصات',
@@ -715,7 +817,6 @@
             }
         }
 
-        // WhatsApp Checkout Integration
         function checkoutToWhatsApp() {
             if (cart.length === 0) {
                 alert('سلة الشراء فارغة!');
@@ -734,12 +835,10 @@
             text += `*العنوان للطلب:* أبو دياب غرب%0A`;
             text += `يرجى تأكيد الطلب وتحديد الموعد.`;
 
-            // Phone number: 01067835779
             const whatsappUrl = `https://wa.me/201067835779?text=${text}`;
             window.open(whatsappUrl, '_blank');
         }
 
-        // Modal Product Details
         function openProductDetail(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) return;
@@ -749,7 +848,6 @@
                 <button onclick="closeProductModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white text-2xl z-10">&times;</button>
                 <div class="space-y-4">
                     <div class="w-full aspect-video rounded-2xl bg-navy-dark overflow-hidden border border-gold/30">
-                        <!-- 🔴 ضع رابط صورتك هنا 🔴 -->
                         <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/0f172a/D4AF37?text=مكتبة+التلميذ';">
                     </div>
                     <span class="inline-block text-xs bg-navy-light text-gold border border-gold/30 px-3 py-1 rounded-full font-semibold">
@@ -781,66 +879,110 @@
             modal.classList.toggle('hidden');
         }
 
-        // View Switcher (Store / Admin Panel)
+        // View Switcher Between Main Site & Independent Admin Panel
         function switchView(view) {
             const shopView = document.getElementById('shop-view');
             const adminView = document.getElementById('admin-view');
-            const btnText = document.getElementById('admin-btn-text');
+            const btnPageShop = document.getElementById('btn-page-shop');
+            const btnPageAdmin = document.getElementById('btn-page-admin');
 
             if (view === 'admin') {
                 shopView.classList.add('hidden');
                 adminView.classList.remove('hidden');
-                btnText.innerText = "عرض المتجر";
+                
+                btnPageShop.className = "px-3 py-1 rounded-lg bg-navy-dark text-slate-300 border border-slate-700 hover:border-gold transition";
+                btnPageAdmin.className = "px-3 py-1 rounded-lg bg-gold text-navy-dark font-bold transition";
+                
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 adminView.classList.add('hidden');
                 shopView.classList.remove('hidden');
-                btnText.innerText = "لوحة التحكم";
+                
+                btnPageShop.className = "px-3 py-1 rounded-lg bg-gold text-navy-dark font-bold transition";
+                btnPageAdmin.className = "px-3 py-1 rounded-lg bg-navy-dark text-slate-300 border border-slate-700 hover:border-gold transition";
+                
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        // Smooth Scroll Helper
-        function scrollToSection(id) {
-            switchView('shop');
-            setTimeout(() => {
-                const elem = document.getElementById(id);
-                if (elem) elem.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+        // Admin Security & Management Logic
+        function verifyAdminPin() {
+            const pinInput = document.getElementById('admin-pin-input').value;
+            const errorMsg = document.getElementById('pin-error-msg');
+            
+            if (pinInput === DEFAULT_PIN) {
+                isAdminLoggedIn = true;
+                errorMsg.classList.add('hidden');
+                document.getElementById('admin-login-screen').classList.add('hidden');
+                document.getElementById('admin-dashboard-content').classList.remove('hidden');
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
         }
 
-        // Admin Functions: Add & Manage Products
-        function handleAddNewProduct(e) {
+        function lockAdminPanel() {
+            isAdminLoggedIn = false;
+            document.getElementById('admin-pin-input').value = '';
+            document.getElementById('admin-login-screen').classList.remove('hidden');
+            document.getElementById('admin-dashboard-content').classList.add('hidden');
+        }
+
+        function handleProductFormSubmit(e) {
             e.preventDefault();
+            const editId = document.getElementById('p-id').value;
             const title = document.getElementById('p-title').value;
             const category = document.getElementById('p-category').value;
             const price = parseFloat(document.getElementById('p-price').value);
             let image = document.getElementById('p-img').value;
             const description = document.getElementById('p-desc').value || "منتج عالي الجودة متوفر بمكتبة التلميذ.";
 
-            if(!image) {
+            if (!image) {
                 image = `https://placehold.co/400x300/0f172a/D4AF37?text=${encodeURIComponent(title)}`;
             }
 
-            const newProd = {
-                id: Date.now(),
-                title,
-                category,
-                price,
-                image,
-                description
-            };
+            if (editId) {
+                // Update Existing Product
+                const pIndex = products.findIndex(p => p.id == editId);
+                if (pIndex !== -1) {
+                    products[pIndex] = { id: Number(editId), title, category, price, image, description };
+                }
+            } else {
+                // Add New Product
+                const newProd = { id: Date.now(), title, category, price, image, description };
+                products.unshift(newProd);
+            }
 
-            products.unshift(newProd);
             renderProducts('all');
             renderAdminProducts();
-            
+            resetProductForm();
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('p-id').value = product.id;
+            document.getElementById('p-title').value = product.title;
+            document.getElementById('p-category').value = product.category;
+            document.getElementById('p-price').value = product.price;
+            document.getElementById('p-img').value = product.image.includes('placehold.co') ? '' : product.image;
+            document.getElementById('p-desc').value = product.description;
+
+            document.getElementById('form-heading').innerText = "تعديل بيانات المنتج";
+            document.getElementById('form-submit-btn').innerHTML = '<i class="fa-solid fa-floppy-disk ml-1"></i> حفظ التعديلات';
+            document.getElementById('form-cancel-btn').classList.remove('hidden');
+        }
+
+        function resetProductForm() {
             document.getElementById('add-product-form').reset();
-            alert('تمت إضافة المنتج بنجاح إلى كتالوج المتجر!');
+            document.getElementById('p-id').value = '';
+            document.getElementById('form-heading').innerText = "إضافة منتج جديد";
+            document.getElementById('form-submit-btn').innerHTML = '<i class="fa-solid fa-plus ml-1"></i> حفظ المنتج';
+            document.getElementById('form-cancel-btn').classList.add('hidden');
         }
 
         function deleteProduct(id) {
-            if(confirm('هل أنت تأكد من رغبتك في حذف هذا المنتج؟')) {
+            if (confirm('هل أنت تأكد من رغبتك في حذف هذا المنتج؟')) {
                 products = products.filter(p => p.id !== id);
                 renderProducts('all');
                 renderAdminProducts();
@@ -851,7 +993,9 @@
             const tableBody = document.getElementById('admin-products-table');
             const statTotal = document.getElementById('stat-total-products');
             
-            statTotal.innerText = products.length;
+            if (statTotal) statTotal.innerText = products.length;
+            if (!tableBody) return;
+
             tableBody.innerHTML = '';
 
             products.forEach(p => {
@@ -865,9 +1009,14 @@
                     <td class="p-3 text-xs text-slate-400">${getCategoryName(p.category)}</td>
                     <td class="p-3 font-bold text-gold">${p.price} ج.م</td>
                     <td class="p-3 text-center">
-                        <button onclick="deleteProduct(${p.id})" class="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/30 hover:border-red-500 transition">
-                            <i class="fa-solid fa-trash ml-1"></i> حذف
-                        </button>
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="editProduct(${p.id})" class="text-amber-400 hover:text-white text-xs px-2 py-1 rounded border border-amber-500/30 hover:border-amber-500 transition">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deleteProduct(${p.id})" class="text-red-400 hover:text-white text-xs px-2 py-1 rounded border border-red-500/30 hover:border-red-500 transition">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 `;
                 tableBody.appendChild(tr);
